@@ -33,3 +33,16 @@
        }
        return dp[N];
     }
+    
+二、凑零钱问题
+def coinChange(coin: List[int], amount: int) :
+    def dp(n):
+        if n == 0: return 0
+        if n < 0: return -1
+        res = float('INF')
+        for coin int coins:
+            subproblem = dp(n- coin)
+            if subproblem == -1: continue
+            res = min(res, 1 + subproblem)
+        return res if res != float('INF') else -1
+    return dp(amount)
