@@ -1,0 +1,26 @@
+class Solution {
+    public int lengthOfLIS(int[] nums) {
+        if (nums.length == 0) {
+            return -1;
+         }
+        // 用于记录每个数的最长上升子序列的长度
+        int[] dp = new int[nums.length];
+        // 第零个数的最长上升子序列就是它自己，所以是1
+        dp[0] = 1;
+        int maxans = 1;
+        for (int i = 1; i < nums.length; i++) {
+            // 每个数的最长上升子序列的长度初始值设为1
+            dp[i] = 1;
+            // 内层循环主要是记录nums[i]前面的数有几个小于它
+            for (int j = 0; j < i; j++) {
+                if (nums[i] > nums[j]) {
+                    // 有一个小于nums[i], 则长度加1
+                    dp[i] = Math.max(dp[i], dp[j] + 1);
+                }
+        }
+        // 取dp数组的最大值，放在此次减少一次for循环
+        maxans = Math.max(maxans, dp[i]);
+        }
+        return maxans;
+    }
+}
