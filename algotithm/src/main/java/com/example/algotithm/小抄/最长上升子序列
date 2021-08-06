@@ -23,4 +23,40 @@ class Solution {
         }
         return maxans;
     }
+    
+    方法二：贪心 + 二分查找
+    整个算法流程为：
+    维护一个数组 d[i]d[i] ，表示长度为 ii 的最长上升子序列的末尾元素的最小值，用 \textit{len}len 记录目前最长上升子序列的长度，起始时 lenlen 为 11，d[1] = \textit{nums}[0]d[1]=nums[0]。
+    设当前已求出的最长上升子序列的长度为 \textit{len}len（初始时为 11），从前往后遍历数组 \textit{nums}nums，在遍历到 \textit{nums}[i]nums[i] 时：
+    如果 \textit{nums}[i] > d[\textit{len}]nums[i]>d[len] ，则直接加入到 dd 数组末尾，并更新 \textit{len} = \textit{len} + 1len=len+1；
+    否则，在 dd 数组中二分查找，找到第一个比 \textit{nums}[i]nums[i] 小的数 d[k]d[k] ，并更新 d[k + 1] = \textit{nums}[i]d[k+1]=nums[i]。
+    
+    public int lengthOfLIS(int[] nums) {
+        int len = 1, n = nums.length;
+        if (n == 0) return 0;
+        // 数组d[i] ，表示长度为 i 的最长上升子序列的末尾元素的最小值,
+        // 所以长度为i = 0的最长上升子序列为0，所以d[0] = 0,废弃不用，
+        // d[1]表示长度为1的最长上升子序列，可初始化为nums[0]
+        int[] d = new int[n + 1];
+        d[len] = nums[0];
+        for (int i = 1; i < n; i++) {
+            // 如果大于d数组的以后一个元素，则把nums[i]添加到d数组的尾端
+            if (nums[i] > d[len]) {
+                d[++len] = nums[i];
+            } else {
+                int left = 1, right = len, pos = 0;
+                while (left <= right) {
+                    int mid = (left + right) / 2;
+                    if (d[mid] < nums[i]) {
+                        pos = mid;
+                        left = mid + 1;
+                    } else {
+                        right = mid -1;
+                    }
+                }
+                d[pos + 1] = nums[i];
+            }
+        }
+        return len;
+    }
 }
